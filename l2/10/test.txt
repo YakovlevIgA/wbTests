@@ -1,0 +1,8 @@
+banana	12K
+apple	2M
+cherry	1G
+apple	2M
+dec	10
+jan	5
+feb	3
+mar	8
