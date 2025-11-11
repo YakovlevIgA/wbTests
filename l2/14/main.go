@@ -47,20 +47,26 @@ func or(channels ...<-chan interface{}) <-chan interface{} {
 	}
 
 	orDone := make(chan interface{})
-
 	go func() {
 		defer close(orDone)
 
-		select {
-		case <-channels[0]:
-		case <-channels[1]:
-		case <-or(append(channels[2:], orDone)...):
-
+		switch len(channels) {
+		case 2:
+			select {
+			case <-channels[0]:
+			case <-channels[1]:
+			}
+		default:
+			select {
+			case <-channels[0]:
+			case <-channels[1]:
+			case <-or(channels[2:]...):
+			}
 		}
 	}()
-
 	return orDone
 }
+
 func main() {
 	sig := func(after time.Duration) <-chan interface{} {
 		c := make(chan interface{})
